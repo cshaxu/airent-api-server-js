@@ -1,0 +1,21 @@
+{
+  "airentApiServerPackage": "../../../src",
+  "type": "commonjs",
+  "schemaPath": "test-schemas",
+  "entityPath": "test-output/entities",
+  "augmentors": [
+    "resources/augmentor.js"
+  ],
+  "templates": [
+    {
+      "name": "resources/action-template.ts.ejs",
+      "outputPath": "{entityPath}/generated/{kababEntityName}-action.ts",
+      "skippable": false
+    },
+    {
+      "name": "resources/service-template.ts.ejs",
+      "outputPath": "{entityPath}/generated/{kababEntityName}-service.ts",
+      "skippable": false
+    }
+  ]
+}
