@@ -17,10 +17,10 @@ import {
 
 // api response builders
 
-export async function buildManyUsersResponse(
+export async function buildManyUsersResponse<S extends UserFieldRequest>(
   many: UserEntity[],
-  fieldRequest: UserFieldRequest,
-): Promise<ManyUsersResponse> {
+  fieldRequest: S,
+): Promise<ManyUsersResponse<S>> {
   const users = await UserEntity.presentMany(many, fieldRequest);
   const createdAts = many.map((one) => one.createdAt);
   const minCreatedAt = getMin(createdAts);
@@ -33,20 +33,20 @@ export async function buildManyUsersResponse(
   return { cursor, users };
 }
 
-export async function buildOneUserResponse(
+export async function buildOneUserResponse<S extends UserFieldRequest>(
   one: UserEntity,
-  fieldRequest: UserFieldRequest,
-): Promise<OneUserResponse> {
+  fieldRequest: S,
+): Promise<OneUserResponse<S>> {
   const user = await one.present(fieldRequest);
   return { user };
 }
 
 // api executors
 
-export async function getManyUsers(
+export async function getManyUsers<S extends UserFieldRequest>(
   query: GetManyUsersQuery,
-  fieldRequest: UserFieldRequest,
-): Promise<ManyUsersResponse> {
+  fieldRequest: S,
+): Promise<ManyUsersResponse<S>> {
   const service = new UserService(
   );
   await service.beforeGetMany(query);
@@ -55,10 +55,10 @@ export async function getManyUsers(
   return await buildManyUsersResponse(many, fieldRequest);
 }
 
-export async function getOneUser(
+export async function getOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
-  fieldRequest: UserFieldRequest,
-): Promise<OneUserResponse> {
+  fieldRequest: S,
+): Promise<OneUserResponse<S>> {
   const service = new UserService(
   );
   await service.beforeGetOne(params);
@@ -67,10 +67,10 @@ export async function getOneUser(
   return await buildOneUserResponse(one, fieldRequest);
 }
       
-export async function createOneUser(
+export async function createOneUser<S extends UserFieldRequest>(
   body: CreateOneUserBody,
-  fieldRequest: UserFieldRequest,
-): Promise<OneUserResponse> {
+  fieldRequest: S,
+): Promise<OneUserResponse<S>> {
   const service = new UserService(
   );
   await service.beforeCreateOne(body);
@@ -79,11 +79,11 @@ export async function createOneUser(
   return await buildOneUserResponse(one, fieldRequest);
 }
 
-export async function updateOneUser(
+export async function updateOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
   body: UpdateOneUserBody,
-  fieldRequest: UserFieldRequest,
-): Promise<OneUserResponse> {
+  fieldRequest: S,
+): Promise<OneUserResponse<S>> {
   const service = new UserService(
  );
   const one = await service.getOne(params);
@@ -93,10 +93,10 @@ export async function updateOneUser(
   return await buildOneUserResponse(updatedOne, fieldRequest);
 }
 
-export async function deleteOneUser(
+export async function deleteOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
-  fieldRequest: UserFieldRequest,
-): Promise<OneUserResponse> {
+  fieldRequest: S
+): Promise<OneUserResponse<S>> {
   const service = new UserService(
   );
   const one = await service.getOne(params);

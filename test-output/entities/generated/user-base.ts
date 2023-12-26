@@ -4,6 +4,7 @@ import {
   EntityConstructor,
   LoadConfig,
   LoadKey,
+  Select,
   toArrayMap,
   toObjectMap,
 } from 'airent';
@@ -38,13 +39,20 @@ export class UserEntityBase extends BaseEntity<
     this.initialize();
   }
 
-  public async present(fieldRequest: UserFieldRequest): Promise<UserResponse> {
+  public async present<S extends UserFieldRequest>(fieldRequest: S): Promise<Select<UserResponse, S>> {
     return {
-      id: fieldRequest.id === undefined ? undefined : this.id,
-      createdAt: fieldRequest.createdAt === undefined ? undefined : this.createdAt,
-      name: fieldRequest.name === undefined ? undefined : this.name,
-      email: fieldRequest.email === undefined ? undefined : this.email,
-    };
+      ...(fieldRequest.id !== undefined && { id: this.id }),
+      ...(fieldRequest.createdAt !== undefined && { createdAt: this.createdAt }),
+      ...(fieldRequest.name !== undefined && { name: this.name }),
+      ...(fieldRequest.email !== undefined && { email: this.email }),
+    } as Select<UserResponse, S>;
+  }
+
+  public static async presentMany<
+    ENTITY extends UserEntityBase,
+    S extends UserFieldRequest
+  >(entities: ENTITY[], fieldRequest: S): Promise<Select<UserResponse, S>[]> {
+    return await Promise.all(entities.map((one) => one.present(fieldRequest)));
   }
 
   /** self loaders */

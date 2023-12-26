@@ -1,3 +1,4 @@
+import { Select } from 'airent';
 
 /** structs */
 
@@ -23,11 +24,11 @@ export type ManyUsersCursor = {
   maxCreatedAt: Date | null;
 };
 
-export type ManyUsersResponse = {
+export type ManyUsersResponse<S extends UserFieldRequest | true> = {
   cursor: ManyUsersCursor;
-  users: UserResponse[];
+  users: Select<UserResponse, S>[];
 };
 
-export type OneUserResponse = {
-  user: UserResponse;
+export type OneUserResponse<S extends UserFieldRequest | true> = {
+  user: Select<UserResponse, S>;
 };

@@ -67,6 +67,15 @@ function addStrings(entity, isVerbose) {
 
 // augment entity - add api code
 
+function buildBeforeType(entity) /* Code[] */ {
+  const lines = [];
+  if (!utils.isPresentableEntity(entity) || !entity.api) {
+    return lines;
+  }
+  lines.push("import { Select } from 'airent';");
+  return lines;
+}
+
 function buildAfterType(entity) /* Code[] */ {
   const lines = [];
   if (!utils.isPresentableEntity(entity) || !entity.api) {
@@ -99,25 +108,29 @@ function buildAfterType(entity) /* Code[] */ {
   if (entity.deprecated) {
     lines.push("/** @deprecated */");
   }
-  lines.push(`export type ${entity.api.strings.manyResponse} = {`);
+  lines.push(
+    `export type ${entity.api.strings.manyResponse}<S extends ${entity.strings.fieldRequestClass} | true> = {`
+  );
   lines.push(`  cursor: ${entity.api.strings.manyCursor};`);
   if (entity.deprecated) {
     lines.push("  /** @deprecated */");
   }
   lines.push(
-    `  ${entity.api.strings.manyEntsVar}: ${entity.strings.responseClass}[];`
+    `  ${entity.api.strings.manyEntsVar}: Select<${entity.strings.responseClass}, S>[];`
   );
   lines.push("};");
   lines.push("");
   if (entity.deprecated) {
     lines.push("/** @deprecated */");
   }
-  lines.push(`export type ${entity.api.strings.oneResponse} = {`);
+  lines.push(
+    `export type ${entity.api.strings.oneResponse}<S extends ${entity.strings.fieldRequestClass} | true> = {`
+  );
   if (entity.deprecated) {
     lines.push("  /** @deprecated */");
   }
   lines.push(
-    `  ${entity.api.strings.oneEntVar}: ${entity.strings.responseClass};`
+    `  ${entity.api.strings.oneEntVar}: Select<${entity.strings.responseClass}, S>;`
   );
   lines.push("};");
   return lines;
@@ -129,6 +142,7 @@ function addCode(entity, isVerbose) {
       `[AIRENT-API-SERVER/INFO] augmenting ${entity.name} - add code ...`
     );
   }
+  entity.code.beforeType = buildBeforeType(entity);
   entity.code.afterType = buildAfterType(entity);
 }
 

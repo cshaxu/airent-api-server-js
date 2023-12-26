@@ -38,10 +38,10 @@ import {
   <%_ if (entity.deprecated) { -%>
 /** @deprecated */
   <%_ } -%>
-export async function <%= `build${entity.api.strings.manyResponse}` %>(
+export async function <%= `build${entity.api.strings.manyResponse}` %><S extends <%= entity.strings.fieldRequestClass %>>(
   many: <%= entity.strings.entityClass %>[],
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.manyResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.manyResponse %><S>> {
   const <%= entity.api.strings.manyEntsVar %> = await <%= entity.strings.entityClass %>.presentMany(many, fieldRequest);
   <%_ entity.fields.filter((f) => f.strings.minVar && f.strings.maxVar).forEach((field) => { -%>
   const <%= utils.pluralize(field.name) %> = many.map((one) => one.<%= field.name %>);
@@ -60,10 +60,10 @@ export async function <%= `build${entity.api.strings.manyResponse}` %>(
   <%_ if (entity.deprecated) { -%>
 /** @deprecated */
   <%_ } -%>
-export async function <%= `build${entity.api.strings.oneResponse}` %>(
+export async function <%= `build${entity.api.strings.oneResponse}` %><S extends <%= entity.strings.fieldRequestClass %>>(
   one: <%= entity.strings.entityClass %>,
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.oneResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.oneResponse %><S>> {
   const <%= entity.api.strings.oneEntVar %> = await one.present(fieldRequest);
   return { <%= entity.api.strings.oneEntVar %> };
 }
@@ -77,13 +77,13 @@ export async function <%= `build${entity.api.strings.oneResponse}` %>(
       <%_ if (entity.deprecated) { -%>
 /** @deprecated */
       <%_ } -%>
-export async function <%= entity.api.strings.getManyAction %>(
+export async function <%= entity.api.strings.getManyAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   query: <%= entity.api.strings.getManyQuery %>,
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>: <%= field.type %>,
       <%_ }); -%>
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.manyResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.manyResponse %><S>> {
   const service = new <%= entity.api.strings.serviceClass %>(
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
     <%= field.name %>,
@@ -100,13 +100,13 @@ export async function <%= entity.api.strings.getManyAction %>(
       <%_ if (entity.deprecated) { -%>
 /** @deprecated */
       <%_ } -%>
-export async function <%= entity.api.strings.getOneAction %>(
+export async function <%= entity.api.strings.getOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>: <%= field.type %>,
       <%_ }); -%>
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.oneResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.oneResponse %><S>> {
   const service = new <%= entity.api.strings.serviceClass %>(
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
     <%= field.name %>,
@@ -123,13 +123,13 @@ export async function <%= entity.api.strings.getOneAction %>(
       <%_ if (entity.deprecated) { -%>
 /** @deprecated */
       <%_ } -%>
-export async function <%= entity.api.strings.createOneAction %>(
+export async function <%= entity.api.strings.createOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   body: <%= entity.api.strings.createOneBody %>,
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>: <%= field.type %>,
       <%_ }); -%>
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.oneResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.oneResponse %><S>> {
   const service = new <%= entity.api.strings.serviceClass %>(
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
     <%= field.name %>,
@@ -146,14 +146,14 @@ export async function <%= entity.api.strings.createOneAction %>(
       <%_ if (entity.deprecated) { -%>
 /** @deprecated */
       <%_ } -%>
-export async function <%= entity.api.strings.updateOneAction %>(
+export async function <%= entity.api.strings.updateOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
   body: <%= entity.api.strings.updateOneBody %>,
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>: <%= field.type %>,
       <%_ }); -%>
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.oneResponse %>> {
+  fieldRequest: S,
+): Promise<<%= entity.api.strings.oneResponse %><S>> {
   const service = new <%= entity.api.strings.serviceClass %>(
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>,
@@ -170,13 +170,13 @@ export async function <%= entity.api.strings.updateOneAction %>(
       <%_ if (entity.deprecated) { -%>
 /** @deprecated */
       <%_ } -%>
-export async function <%= entity.api.strings.deleteOneAction %>(
+export async function <%= entity.api.strings.deleteOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
   <%= field.name %>: <%= field.type %>,
       <%_ }); -%>
-  fieldRequest: <%= entity.strings.fieldRequestClass %>,
-): Promise<<%= entity.api.strings.oneResponse %>> {
+  fieldRequest: S
+): Promise<<%= entity.api.strings.oneResponse %><S>> {
   const service = new <%= entity.api.strings.serviceClass %>(
       <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
     <%= field.name %>,
