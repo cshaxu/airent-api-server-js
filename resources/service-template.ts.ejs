@@ -1,4 +1,5 @@
 <% if (utils.isPresentableEntity(entity) && entity.api) { -%>
+<%- config.requestContextImport %>
 import { <%= entity.strings.entityClass %> } from '../<%= entity.strings.entityPackage %>';
   <%_ entity.types.filter(utils.isImportType).forEach((type) => { -%>
 import { <%= type.strings.externalClass %> } from '<%= type.strings.externalPackage %>';
@@ -29,21 +30,11 @@ import {
 /** @deprecated */
   <%_ } -%>
 export abstract class <%= `${entity.api.strings.serviceClass}Base` %> {
-  <%_ if (entity.api.service.fields?.length) { -%>
-    <%_ entity.api.service.fields.forEach((field) => { -%>
-  protected <%= field.name %>: <%= field.type %>;
-    <%_ }); -%>
+  protected rc: RequestContext;
 
-  public constructor(
-    <%_ entity.api.service.fields.forEach((field) => { -%>
-    <%= field.name %>: <%= field.type %>,
-    <%_ }); -%>
-  ) {
-    <%_ entity.api.service.fields.forEach((field) => { -%>
-    this.<%= field.name %> = <%= field.name %>;
-    <%_ }); -%>
+  public constructor(rc: RequestContext) {
+    this.rc = rc;
   }
-  <%_ } -%>
   <%_ if (entity.api.booleans.hasGetMany) { -%>
 
   public async beforeGetMany(query: <%= entity.api.strings.getManyQuery %>): Promise<void> {}

@@ -1,5 +1,6 @@
 {
   "airentApiServerPackage": "../../../src",
+  "requestContextImport": "import { RequestContext } from '../../../test-resources/rc';",
   "type": "commonjs",
   "schemaPath": "test-schemas",
   "entityPath": "test-output/entities",

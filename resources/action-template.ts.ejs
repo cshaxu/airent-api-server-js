@@ -14,6 +14,7 @@ import { <%= type.strings.externalClass %> } from '<%= type.strings.externalPack
 import { <%= type.name %> } from './<%= entity.strings.typePackage %>';
   <%_ }); -%>
   <%_ if (entity.api) { -%>
+<%- config.requestContextImport %>
 import { <%= entity.api.strings.serviceClass %> } from '<%= entity.api.service.import %>';
     <%_ if (entity.api.booleans.hasGetMany || entity.api.booleans.hasCreateOne || entity.api.booleans.hasUpdateOne) { -%>
 import {
@@ -79,16 +80,10 @@ export async function <%= `build${entity.api.strings.oneResponse}` %><S extends 
       <%_ } -%>
 export async function <%= entity.api.strings.getManyAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   query: <%= entity.api.strings.getManyQuery %>,
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>: <%= field.type %>,
-      <%_ }); -%>
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<<%= entity.api.strings.manyResponse %><S>> {
-  const service = new <%= entity.api.strings.serviceClass %>(
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-    <%= field.name %>,
-      <%_ }); -%>
-  );
+  const service = new <%= entity.api.strings.serviceClass %>(rc);
   await service.beforeGetMany(query);
   const many = await service.getMany(query);
   await service.afterGetMany(many, query);
@@ -102,16 +97,10 @@ export async function <%= entity.api.strings.getManyAction %><S extends <%= enti
       <%_ } -%>
 export async function <%= entity.api.strings.getOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>: <%= field.type %>,
-      <%_ }); -%>
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<<%= entity.api.strings.oneResponse %><S>> {
-  const service = new <%= entity.api.strings.serviceClass %>(
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-    <%= field.name %>,
-      <%_ }); -%>
-  );
+  const service = new <%= entity.api.strings.serviceClass %>(rc);
   await service.beforeGetOne(params);
   const one = await service.getOne(params);
   await service.afterGetOne(one, params);
@@ -125,16 +114,10 @@ export async function <%= entity.api.strings.getOneAction %><S extends <%= entit
       <%_ } -%>
 export async function <%= entity.api.strings.createOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   body: <%= entity.api.strings.createOneBody %>,
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>: <%= field.type %>,
-      <%_ }); -%>
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<<%= entity.api.strings.oneResponse %><S>> {
-  const service = new <%= entity.api.strings.serviceClass %>(
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-    <%= field.name %>,
-      <%_ }); -%>
-  );
+  const service = new <%= entity.api.strings.serviceClass %>(rc);
   await service.beforeCreateOne(body);
   const one = await service.createOne(body);
   await service.afterCreateOne(one, body);
@@ -149,15 +132,10 @@ export async function <%= entity.api.strings.createOneAction %><S extends <%= en
 export async function <%= entity.api.strings.updateOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
   body: <%= entity.api.strings.updateOneBody %>,
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>: <%= field.type %>,
-      <%_ }); -%>
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<<%= entity.api.strings.oneResponse %><S>> {
-  const service = new <%= entity.api.strings.serviceClass %>(
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>,
-      <%_ }); -%> );
+  const service = new <%= entity.api.strings.serviceClass %>(rc);
   const one = await service.getOne(params);
   await service.beforeUpdateOne(one, body);
   const updatedOne = await service.updateOne(one, body);
@@ -172,16 +150,10 @@ export async function <%= entity.api.strings.updateOneAction %><S extends <%= en
       <%_ } -%>
 export async function <%= entity.api.strings.deleteOneAction %><S extends <%= entity.strings.fieldRequestClass %>>(
   params: <%= entity.api.strings.getOneParams %>,
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-  <%= field.name %>: <%= field.type %>,
-      <%_ }); -%>
+  rc: RequestContext,
   fieldRequest: S
 ): Promise<<%= entity.api.strings.oneResponse %><S>> {
-  const service = new <%= entity.api.strings.serviceClass %>(
-      <%_ (entity.api.service.fields ?? []).forEach((field) => { -%>
-    <%= field.name %>,
-      <%_ }); -%>
-  );
+  const service = new <%= entity.api.strings.serviceClass %>(rc);
   const one = await service.getOne(params);
   await service.beforeDeleteOne(one);
   const deletedOne = await service.deleteOne(one);

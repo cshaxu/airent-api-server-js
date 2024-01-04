@@ -7,6 +7,7 @@ import {
 } from './user-type';
 import { UserEntity } from '../user';
 import { UserModel } from './user-type';
+import { RequestContext } from '../../../test-resources/rc';
 import { UserService } from '../../../test-resources/user-service';
 import {
   GetManyUsersQuery,
@@ -45,10 +46,10 @@ export async function buildOneUserResponse<S extends UserFieldRequest>(
 
 export async function getManyUsers<S extends UserFieldRequest>(
   query: GetManyUsersQuery,
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<ManyUsersResponse<S>> {
-  const service = new UserService(
-  );
+  const service = new UserService(rc);
   await service.beforeGetMany(query);
   const many = await service.getMany(query);
   await service.afterGetMany(many, query);
@@ -57,10 +58,10 @@ export async function getManyUsers<S extends UserFieldRequest>(
 
 export async function getOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<OneUserResponse<S>> {
-  const service = new UserService(
-  );
+  const service = new UserService(rc);
   await service.beforeGetOne(params);
   const one = await service.getOne(params);
   await service.afterGetOne(one, params);
@@ -69,10 +70,10 @@ export async function getOneUser<S extends UserFieldRequest>(
       
 export async function createOneUser<S extends UserFieldRequest>(
   body: CreateOneUserBody,
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<OneUserResponse<S>> {
-  const service = new UserService(
-  );
+  const service = new UserService(rc);
   await service.beforeCreateOne(body);
   const one = await service.createOne(body);
   await service.afterCreateOne(one, body);
@@ -82,10 +83,10 @@ export async function createOneUser<S extends UserFieldRequest>(
 export async function updateOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
   body: UpdateOneUserBody,
+  rc: RequestContext,
   fieldRequest: S,
 ): Promise<OneUserResponse<S>> {
-  const service = new UserService(
- );
+  const service = new UserService(rc);
   const one = await service.getOne(params);
   await service.beforeUpdateOne(one, body);
   const updatedOne = await service.updateOne(one, body);
@@ -95,10 +96,10 @@ export async function updateOneUser<S extends UserFieldRequest>(
 
 export async function deleteOneUser<S extends UserFieldRequest>(
   params: GetOneUserParams,
+  rc: RequestContext,
   fieldRequest: S
 ): Promise<OneUserResponse<S>> {
-  const service = new UserService(
-  );
+  const service = new UserService(rc);
   const one = await service.getOne(params);
   await service.beforeDeleteOne(one);
   const deletedOne = await service.deleteOne(one);

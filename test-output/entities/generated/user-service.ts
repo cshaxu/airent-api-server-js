@@ -1,3 +1,4 @@
+import { RequestContext } from '../../../test-resources/rc';
 import { UserEntity } from '../user';
 import {
   UserModel,
@@ -10,6 +11,11 @@ import {
 } from '../../../test-resources/user-type';
 
 export abstract class UserServiceBase {
+  protected rc: RequestContext;
+
+  public constructor(rc: RequestContext) {
+    this.rc = rc;
+  }
 
   public async beforeGetMany(query: GetManyUsersQuery): Promise<void> {}
 

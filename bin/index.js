@@ -31,6 +31,8 @@ async function getShouldEnable(name, isEnabled) {
  *  @property {string} entityPath
  *  @property {?string[]} [augmentors]
  *  @property {?Template[]} [templates]
+ *  @property {?string} airentApiServerPackage
+ *  @property {string} requestContextImport
  */
 
 const CONFIG_FILE_PATH = path.join(process.cwd(), "airent.config.json");
@@ -83,6 +85,16 @@ async function configure() {
       outputPath: "{entityPath}/generated/{kababEntityName}-service.ts",
       skippable: false,
     });
+  }
+  const isRequestContextImportEnabled =
+    config.requestContextImport !== undefined;
+  if (!isRequestContextImportEnabled) {
+    const defaultRequestContextImport =
+      "import { RequestContext } from '@/types/server';";
+    config.requestContextImport = await askQuestion(
+      'Statement to import "RequestContext"',
+      config.requestContextImport ?? defaultRequestContextImport
+    );
   }
 
   const content = JSON.stringify(config, null, 2) + "\n";
